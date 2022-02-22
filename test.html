@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "easy-stats.php",
+                type: "get",
+                data: {
+                    sid: 2,
+                },
+                success: function (response) {
+                    response = $.parseJSON(response);
+                    let trHTML = '';
+                    trHTML += '<tr><td>Online</td><td>' + response.stat.online.data + '</td></tr>';
+                    trHTML += '<tr><td>Total online time</td><td>' + response.stat.characters.data.totaltime + '</td></tr>';
+                    trHTML += '<tr><td>Total online time</td><td>' + response.stat.characters.data.totaltime_converted + '</td></tr>';
+                    trHTML += '<tr><td>PvP</td><td>' + response.stat.characters.data.pvp + '</td></tr>';
+                    trHTML += '<tr><td>Pk</td><td>' + response.stat.characters.data.pk + '</td></tr>';
+                    trHTML += '<tr><td>Nobles</td><td>' + response.stat.characters.data.noble + '</td></tr>';
+                    trHTML += '<tr><td>Max online</td><td>' + response.stat.global.data.recordonline + '</td></tr>';
+                    trHTML += '<tr><td>olympiad_end</td><td>' + new Date(response.stat.global.data.olympiad_end).toLocaleString() + '</td></tr>';
+                    trHTML += '<tr><td>olympiad_valdationend</td><td>' + new Date(response.stat.global.data.olympiad_valdationend).toLocaleString() + '</td></tr>';
+                    trHTML += '<tr><td>olympiad_nextweeklychange</td><td>' + new Date(response.stat.global.data.olympiad_nextweeklychange).toLocaleString() + '</td></tr>';
+                    trHTML += '<tr><td>fishchampionshipend</td><td>' + new Date(response.stat.global.data.fishchampionshipend).toLocaleString() + '</td></tr>';
+                    $('#records_table').append(trHTML);
+                    let epicHTML = '';
+                    let epic = response.stat.epic.data;
+                    for (const i in epic) {
+                        let item = epic[i];
+                        epicHTML += 'Item: ' + item.name + '</br><img src="images/' + i + '.gif"></br>Grade: ' + item.grade + '</br>Count: ' + item.count + '<hr>';
+                    }
+                    $('#epic').append(epicHTML);
+                    $('#lastModified').append(new Date(response.lastModified * 1000).toLocaleString());
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                }
+            });
+
+        });
+    </script>
+    <title>Test data.</title>
+</head>
+<body>
+
+<b>Data</b>
+<table id="records_table" border='1'>
+</table>
+<div id="epic"></div>
+<div id="lastModified">Updated at:<br></div>
+</body>
+</html>

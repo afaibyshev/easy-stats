@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  db-ant:
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'root'
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - '2345:3306'
+    expose:
+      - '2345'
+    volumes:
+      - './.mysql-data/db:/var/lib/mysql'
+      - './initial.sql:/docker-entrypoint-initdb.d/initial.sql'

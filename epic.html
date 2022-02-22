@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "easy-stats.php",
+                type: "get",
+                data: {
+                    sid: 2,
+                    type: 'epic',
+                },
+                success: function (response) {
+                    response.stat = undefined;
+                    response = $.parseJSON(response);
+                    let stat = response.stat;
+                    for (const i in stat) {
+                        let HTML = '';
+                        let item = stat[i];
+                        HTML += 'Item: ' + item.info.name + '<br><img src="images/' + i + '.gif" alt="' + item.info.name + '">Grade: ' + item.info.grade;
+                        let items = item.items
+                        HTML += '<table border=\'1\'>';
+                        HTML += '<tr>\n' +
+                            '    <th>Name</th>\n' +
+                            '    <th>Status</th>\n' +
+                            '    <th>Clan</th>\n' +
+                            '    <th>Enchant</th>\n' +
+                            '  </tr>';
+                        for (const c in items) {
+                            let owner = items[c];
+                            HTML += '<tr>\n' +
+                                '    <td>' + owner.name + '</td>\n' +
+                                '    <td>' + owner.status + '</td>\n' +
+                                '    <td>' + owner.clan + '</td>\n' +
+                                '    <td>' + owner.enchant + '</td>\n' +
+                                '  </tr>';
+                        }
+                        HTML += '</table><br>';
+                        $('#dataset').append(HTML);
+                    }
+
+                    $('#lastModified').append(new Date(response.lastModified * 1000).toLocaleString());
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                }
+            });
+
+        });
+    </script>
+    <title>Epic test</title>
+</head>
+<body>
+
+<div id="dataset">Epic<br></div>
+<div id="lastModified">Updated at:<br></div>
+</body>
+</html>
